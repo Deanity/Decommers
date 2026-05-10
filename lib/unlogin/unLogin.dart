@@ -65,10 +65,10 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
             // Waving Hand Illustration (Placeholder for 3D Icon)
             Container(
               padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: const Color(0xFF5BC33C).withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFF5BC33C).withOpacity(0.1),
+            //     shape: BoxShape.circle,
+            //   ),
               child: Image.asset(
                 'assets/images/waving_hand_3d.png',
                 height: 80,

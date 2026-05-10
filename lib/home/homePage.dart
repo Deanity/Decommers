@@ -4,6 +4,7 @@ import 'package:decommers/components/section_header.dart';
 import 'package:decommers/components/product_card.dart';
 import 'package:decommers/components/category_item.dart';
 import 'package:decommers/components/news_item.dart';
+import 'package:decommers/home/search/searchScreen.dart';
 import 'package:decommers/components/custom_search_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -118,7 +119,15 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
-            const CustomSearchBar(),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchScreen()),
+                );
+              },
+              child: const AbsorbPointer(child: CustomSearchBar()),
+            ),
             const SizedBox(height: 15),
             
             // Infinite Premium Promo Banner Carousel
