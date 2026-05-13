@@ -5,17 +5,21 @@ class CategoryItem extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color color;
+  final VoidCallback? onTap;
 
   const CategoryItem({
     super.key,
     required this.label,
     required this.icon,
     required this.color,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
       children: [
         Container(
           width: 60,
@@ -40,6 +44,7 @@ class CategoryItem extends StatelessWidget {
           ),
         ),
       ],
+    ),
     );
   }
 }

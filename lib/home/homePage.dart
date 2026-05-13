@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/section_header.dart';
+import 'package:decommers/home/product/detailProduct.dart';
 import 'package:decommers/components/product_card.dart';
+import 'package:decommers/home/product/detailProduct.dart';
 import 'package:decommers/components/category_item.dart';
 import 'package:decommers/components/news_item.dart';
 import 'package:decommers/home/search/searchScreen.dart';
 import 'package:decommers/components/custom_search_bar.dart';
+import 'package:decommers/home/category/categoryScreen.dart';
+import 'package:decommers/home/product/detailProduct.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -141,10 +145,10 @@ class _HomePageState extends State<HomePage> {
                   final banner = banners[bannerIndex];
                   return _buildPromoBanner(
                     context,
-                    title: banner['title'],
-                    subtitle: banner['subtitle'],
-                    colors: banner['colors'],
-                    icon: banner['icon'],
+                    title: banner['title'] as String,
+                    subtitle: banner['subtitle'] as String,
+                    colors: List<Color>.from(banner['colors'] as List),
+                    icon: banner['icon'] as IconData,
                   );
                 },
               ),
@@ -153,20 +157,45 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 30),
             // Modern Categories
             const SectionHeader(title: 'Categories', onSeeAll: null),
-            const SingleChildScrollView(
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
-                  CategoryItem(label: 'Fashion', icon: Icons.checkroom, color: Colors.orangeAccent),
-                  SizedBox(width: 25),
-                  CategoryItem(label: 'Electronic', icon: Icons.devices, color: Colors.blueAccent),
-                  SizedBox(width: 25),
-                  CategoryItem(label: 'Furniture', icon: Icons.chair, color: Colors.brown),
-                  SizedBox(width: 25),
-                  CategoryItem(label: 'Beauty', icon: Icons.face_retouching_natural, color: Colors.pinkAccent),
-                  SizedBox(width: 25),
-                  CategoryItem(label: 'Gadget', icon: Icons.smartphone, color: Colors.purpleAccent),
+                  CategoryItem(
+                    label: 'Fashion', 
+                    icon: Icons.checkroom, 
+                    color: Colors.orangeAccent,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(categoryName: 'Fashion'))),
+                  ),
+                  const SizedBox(width: 25),
+                  CategoryItem(
+                    label: 'Electronic', 
+                    icon: Icons.devices, 
+                    color: Colors.blueAccent,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(categoryName: 'Electronic'))),
+                  ),
+                  const SizedBox(width: 25),
+                  CategoryItem(
+                    label: 'Furniture', 
+                    icon: Icons.chair, 
+                    color: Colors.brown,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(categoryName: 'Furniture'))),
+                  ),
+                  const SizedBox(width: 25),
+                  CategoryItem(
+                    label: 'Beauty', 
+                    icon: Icons.face_retouching_natural, 
+                    color: Colors.pinkAccent,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(categoryName: 'Beauty'))),
+                  ),
+                  const SizedBox(width: 25),
+                  CategoryItem(
+                    label: 'Gadget', 
+                    icon: Icons.smartphone, 
+                    color: Colors.purpleAccent,
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(categoryName: 'Gadget'))),
+                  ),
                 ],
               ),
             ),
@@ -176,30 +205,36 @@ class _HomePageState extends State<HomePage> {
             
             // Featured Products Horizontal List
             SizedBox(
-              height: 250,
+              height: 245,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: const [
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                children: [
                   ProductCard(
                     title: 'TWS Airbuds Pro 2',
                     price: 'Rp 450.000',
                     rating: '4.8',
                     reviews: '124',
                     isSale: true,
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                   ProductCard(
                     title: 'Smart Watch Series 7',
                     price: 'Rp 850.000',
                     rating: '4.9',
                     reviews: '89',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                   ProductCard(
                     title: 'Leather Wallet Brown',
                     price: 'Rp 150.000',
                     rating: '4.7',
                     reviews: '210',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                 ],
               ),
@@ -268,35 +303,43 @@ class _HomePageState extends State<HomePage> {
             
             // Best Sellers Grid
             SizedBox(
-              height: 250,
+              height: 245,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                children: const [
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                children: [
                   ProductCard(
                     title: 'TWS Airbuds Pro 2',
                     price: 'Rp 450.000',
                     rating: '4.8',
                     reviews: '124',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                   ProductCard(
                     title: 'Smart Watch Series 7',
                     price: 'Rp 850.000',
                     rating: '4.9',
                     reviews: '89',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                   ProductCard(
                     title: 'Leather Wallet Brown',
                     price: 'Rp 150.000',
                     rating: '4.7',
                     reviews: '210',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                   ProductCard(
                     title: 'Smart Phone Pro',
                     price: 'Rp 2.000.000',
                     rating: '4.9',
                     reviews: '150',
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                   ),
                 ],
               ),

@@ -271,10 +271,10 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     onTap: () => _showLoginModal(context),
                     child: _buildPromoBanner(
                       context,
-                      title: banner['title'],
-                      subtitle: banner['subtitle'],
-                      colors: banner['colors'],
-                      icon: banner['icon'],
+                      title: banner['title'] as String,
+                      subtitle: banner['subtitle'] as String,
+                      colors: List<Color>.from(banner['colors'] as List),
+                      icon: banner['icon'] as IconData,
                     ),
                   );
                 },
@@ -307,7 +307,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
             
             // Featured Products Horizontal List
             SizedBox(
-              height: 250,
+              height: 225,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
@@ -320,6 +320,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     reviews: '124',
                     isSale: true,
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                   ProductCard(
                     title: 'Smart Watch Series 7',
@@ -327,6 +328,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.9',
                     reviews: '89',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                   ProductCard(
                     title: 'Leather Wallet Brown',
@@ -334,6 +336,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.7',
                     reviews: '210',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                 ],
               ),
@@ -405,7 +408,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
             
             // Best Sellers Grid
             SizedBox(
-              height: 250,
+              height: 225,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
@@ -417,6 +420,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.8',
                     reviews: '124',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                   ProductCard(
                     title: 'Smart Watch Series 7',
@@ -424,6 +428,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.9',
                     reviews: '89',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                   ProductCard(
                     title: 'Leather Wallet Brown',
@@ -431,6 +436,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.7',
                     reviews: '210',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                   ProductCard(
                     title: 'Smart Phone Pro',
@@ -438,6 +444,7 @@ class _UnLoginScreenState extends State<UnLoginScreen> {
                     rating: '4.9',
                     reviews: '150',
                     onTap: () => _showLoginModal(context),
+                    margin: const EdgeInsets.only(right: 15, bottom: 10),
                   ),
                 ],
               ),

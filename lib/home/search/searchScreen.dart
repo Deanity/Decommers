@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/product_card.dart';
 import 'package:decommers/components/section_header.dart';
+import 'package:decommers/home/product/detailProduct.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -170,29 +171,35 @@ class _SearchScreenState extends State<SearchScreen> {
               
               // Featured Products Horizontal List
               SizedBox(
-                height: 250,
+                height: 240,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  children: const [
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  children: [
                     ProductCard(
                       title: 'TMA-2 HD Wireless',
                       price: 'Rp. 1.500.000',
                       rating: '4.6',
                       reviews: '86',
+                      margin: const EdgeInsets.only(right: 15, bottom: 10),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                     ),
                     ProductCard(
                       title: 'TMA-2 HD Wireless',
                       price: 'Rp. 1.500.000',
                       rating: '4.6',
                       reviews: '86',
+                      margin: const EdgeInsets.only(right: 15, bottom: 10),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                     ),
                     ProductCard(
                       title: 'TMA-2 HD Wireless',
                       price: 'Rp. 1.500.000',
                       rating: '4.6',
                       reviews: '86',
+                      margin: const EdgeInsets.only(right: 15, bottom: 10),
+                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailProduct())),
                     ),
                   ],
                 ),

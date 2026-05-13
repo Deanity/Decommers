@@ -9,6 +9,7 @@ class ProductCard extends StatelessWidget {
   final String? imageUrl;
   final bool isSale;
   final VoidCallback? onTap;
+  final EdgeInsetsGeometry? margin;
 
   const ProductCard({
     super.key,
@@ -19,30 +20,31 @@ class ProductCard extends StatelessWidget {
     this.imageUrl,
     this.isSale = false,
     this.onTap,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
+    return Container(
+      width: 160,
+      height: 240,
+      margin: margin ?? EdgeInsets.zero,
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        child: Container(
-          width: 165,
-          height: 230, // Increased from 220 to fix overflow
-          margin: const EdgeInsets.only(right: 15, bottom: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20), // Slightly less rounded for compact look
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 15,
-                offset: const Offset(0, 5),
-              ),
-            ],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
           child: Stack(
             children: [
               Padding(
@@ -50,18 +52,16 @@ class ProductCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Container(
-                        height: 110, // More proportional
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: imageUrl != null 
-                          ? Image.asset(imageUrl!, fit: BoxFit.contain)
-                          : const Icon(Icons.image, color: Colors.grey, size: 35),
+                    Container(
+                      height: 100,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(15),
                       ),
+                      child: imageUrl != null && imageUrl!.isNotEmpty
+                        ? Image.asset(imageUrl!, fit: BoxFit.contain)
+                        : const Icon(Icons.image, color: Colors.grey, size: 35),
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
@@ -87,7 +87,7 @@ class ProductCard extends StatelessWidget {
                         color: const Color(0xFF5BC33C),
                       ),
                     ),
-                    const SizedBox(height: 10), // Fixed gap instead of Spacer
+                    const Expanded(child: SizedBox()), // Replaced Spacer for safer layout
                     Row(
                       children: [
                         const Icon(Icons.star, color: Colors.amber, size: 12),
@@ -101,15 +101,11 @@ class ProductCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            '$reviews Reviews',
-                            style: GoogleFonts.outfit(
-                              fontSize: 10,
-                              color: Colors.grey,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        Text(
+                          '$reviews Reviews',
+                          style: GoogleFonts.outfit(
+                            fontSize: 10,
+                            color: Colors.grey,
                           ),
                         ),
                       ],
