@@ -2,10 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/custom_text_field.dart';
 import 'package:decommers/auth/SignIn/signIn.dart';
-import 'package:decommers/auth/SignUp/registerAccountVerification.dart';
+import 'package:decommers/auth/SignUp/registerAccountName-Password.dart';
 
-class RegisterAccountEmailScreen extends StatelessWidget {
+class RegisterAccountEmailScreen extends StatefulWidget {
   const RegisterAccountEmailScreen({super.key});
+
+  @override
+  State<RegisterAccountEmailScreen> createState() => _RegisterAccountEmailScreenState();
+}
+
+class _RegisterAccountEmailScreenState extends State<RegisterAccountEmailScreen> {
+  final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +53,17 @@ class RegisterAccountEmailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 Text(
-                  'Masukan Email/ No. Hp untuk mendaftar',
+                  'Masukan Email untuk mendaftar',
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     color: Colors.grey[500],
                   ),
                 ),
                 const SizedBox(height: 60),
-                const CustomTextField(
-                  label: 'Email/ Phone',
-                  hintText: 'Enter your email or phone',
+                CustomTextField(
+                  controller: _emailController,
+                  label: 'Email',
+                  hintText: 'Enter your email',
                   textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 60),
@@ -58,11 +72,19 @@ class RegisterAccountEmailScreen extends StatelessWidget {
                   height: 65,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (_emailController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please enter your email')),
+                        );
+                        return;
+                      }
                       FocusScope.of(context).unfocus();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const RegisterAccountVerificationScreen(),
+                          builder: (context) => RegisterAccountNamePasswordScreen(
+                            email: _emailController.text.trim(),
+                          ),
                         ),
                       );
                     },

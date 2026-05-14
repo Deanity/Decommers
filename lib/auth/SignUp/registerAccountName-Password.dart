@@ -2,9 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/custom_text_field.dart';
 import 'package:decommers/home/homePage.dart';
+import 'package:decommers/services/auth_service.dart';
 
-class RegisterAccountNamePasswordScreen extends StatelessWidget {
-  const RegisterAccountNamePasswordScreen({super.key});
+class RegisterAccountNamePasswordScreen extends StatefulWidget {
+  final String email;
+  const RegisterAccountNamePasswordScreen({super.key, required this.email});
+
+  @override
+  State<RegisterAccountNamePasswordScreen> createState() => _RegisterAccountNamePasswordScreenState();
+}
+
+class _RegisterAccountNamePasswordScreenState extends State<RegisterAccountNamePasswordScreen> {
+  final _nameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _referralController = TextEditingController();
+  final _authService = AuthService();
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _passwordController.dispose();
+    _referralController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRegister() async {
+    if (_nameController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all required fields')),
+      );
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password must be at least 6 characters')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await _authService.register(
+        email: widget.email,
+        password: _passwordController.text.trim(),
+        fullName: _nameController.text.trim(),
+        referralCode: _referralController.text.trim().isEmpty ? null : _referralController.text.trim(),
+      );
+      if (mounted) {
+        _showSuccessModal(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   void _showSuccessModal(BuildContext context) {
     showDialog(
@@ -20,6 +79,8 @@ class RegisterAccountNamePasswordScreen extends StatelessWidget {
               Image.asset(
                 'assets/images/success_illustration_3d.png',
                 height: 150,
+                errorBuilder: (context, error, stackTrace) => 
+                  const Icon(Icons.check_circle, size: 100, color: Color(0xFF5BC33C)),
               ),
               const SizedBox(height: 30),
               Text(
@@ -46,7 +107,6 @@ class RegisterAccountNamePasswordScreen extends StatelessWidget {
       ),
     );
 
-    // Wait 3 seconds then navigate to Home (UnLogin for now or Login)
     Future.delayed(const Duration(seconds: 3), () {
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(
@@ -99,13 +159,15 @@ class RegisterAccountNamePasswordScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 50),
-                const CustomTextField(
+                CustomTextField(
+                  controller: _nameController,
                   label: 'Full Name',
                   hintText: 'Matias Duarte',
                   textInputAction: TextInputAction.next,
                 ),
                 const SizedBox(height: 30),
-                const CustomTextField(
+                CustomTextField(
+                  controller: _passwordController,
                   label: 'Password',
                   hintText: 'Enter your password',
                   isPassword: true,
@@ -126,21 +188,18 @@ class RegisterAccountNamePasswordScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 30),
-                const CustomTextField(
+                CustomTextField(
+                  controller: _referralController,
                   label: 'Referal Code (Optional)',
                   hintText: 'Input your code',
                   textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 60),
-                // Confirmation Button
                 SizedBox(
                   width: double.infinity,
                   height: 65,
                   child: ElevatedButton(
-                    onPressed: () {
-                      FocusScope.of(context).unfocus();
-                      _showSuccessModal(context);
-                    },
+                    onPressed: _isLoading ? null : _handleRegister,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryGreen,
                       elevation: 8,
@@ -149,14 +208,16 @@ class RegisterAccountNamePasswordScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(18),
                       ),
                     ),
-                    child: Text(
-                      'Confirmation',
-                      style: GoogleFonts.outfit(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : Text(
+                          'Confirmation',
+                          style: GoogleFonts.outfit(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                   ),
                 ),
                 const SizedBox(height: 30),

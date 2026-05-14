@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/unlogin/unLogin.dart';
+import 'package:decommers/home/homePage.dart';
+import 'package:decommers/services/auth_service.dart';
 
 class SplashScreenNext extends StatelessWidget {
   const SplashScreenNext({super.key});
@@ -9,6 +11,7 @@ class SplashScreenNext extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     const primaryGreen = Color(0xFF5BC33C);
+    final authService = AuthService();
     
     return Scaffold(
       backgroundColor: primaryGreen,
@@ -113,10 +116,17 @@ class SplashScreenNext extends StatelessWidget {
                     elevation: 5,
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const UnLoginScreen()),
-                        );
+                        if (authService.currentUser != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const HomePage()),
+                          );
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const UnLoginScreen()),
+                          );
+                        }
                       },
                       borderRadius: BorderRadius.circular(45),
                       child: Container(

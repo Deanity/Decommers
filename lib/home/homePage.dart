@@ -3,13 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/section_header.dart';
 import 'package:decommers/home/product/detailProduct.dart';
 import 'package:decommers/components/product_card.dart';
-import 'package:decommers/home/product/detailProduct.dart';
 import 'package:decommers/components/category_item.dart';
-import 'package:decommers/components/news_item.dart';
 import 'package:decommers/home/search/searchScreen.dart';
 import 'package:decommers/components/custom_search_bar.dart';
 import 'package:decommers/home/category/categoryScreen.dart';
-import 'package:decommers/home/product/detailProduct.dart';
+import 'package:decommers/home/profile/profileScreen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,13 +17,94 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeContent(),
+    const Scaffold(body: Center(child: Text('Wishlist Screen'))),
+    const Scaffold(body: Center(child: Text('Orders Screen'))),
+    const ProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryGreen = Color(0xFF5BC33C);
+
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: primaryGreen,
+          unselectedItemColor: Colors.grey[400],
+          currentIndex: _currentIndex,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          selectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 12),
+          unselectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w500, fontSize: 12),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_filled, size: 26), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite_outline, size: 26), label: 'Wishlist'),
+            BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined, size: 26), label: 'Orders'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded, size: 26), label: 'Profile'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeContent extends StatefulWidget {
+  const HomeContent({super.key});
+
+  @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
   late PageController _pageController;
-  final int _totalBanners = 3;
+  static const primaryGreen = Color(0xFF5BC33C);
+
+  final List<Map<String, dynamic>> banners = [
+    {
+      'title': 'Special Offer\nFor Today!',
+      'subtitle': 'LIMITED TIME',
+      'colors': [primaryGreen, primaryGreen.withOpacity(0.8)],
+      'icon': Icons.stars_rounded,
+    },
+    {
+      'title': 'New Arrival\nTech Gadgets',
+      'subtitle': 'NEW TECH',
+      'colors': [const Color(0xFF2196F3), const Color(0xFF00BCD4)],
+      'icon': Icons.devices,
+    },
+    {
+      'title': 'Big Sale\nUp to 50%!',
+      'subtitle': 'FLASH SALE',
+      'colors': [const Color(0xFFFF5722), const Color(0xFFFF9800)],
+      'icon': Icons.local_fire_department_rounded,
+    },
+  ];
   
   @override
   void initState() {
     super.initState();
-    // Start at a large index to simulate infinite scroll
     _pageController = PageController(initialPage: 1000, viewportFraction: 0.9);
   }
 
@@ -37,30 +116,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryGreen = Color(0xFF5BC33C);
-
-    // List of banner data
-    final List<Map<String, dynamic>> banners = [
-      {
-        'title': 'Special Offer\nFor Today!',
-        'subtitle': 'LIMITED TIME',
-        'colors': [primaryGreen, primaryGreen.withOpacity(0.8)],
-        'icon': Icons.stars_rounded,
-      },
-      {
-        'title': 'New Arrival\nTech Gadgets',
-        'subtitle': 'NEW TECH',
-        'colors': [const Color(0xFF2196F3), const Color(0xFF00BCD4)],
-        'icon': Icons.devices,
-      },
-      {
-        'title': 'Big Sale\nUp to 50%!',
-        'subtitle': 'FLASH SALE',
-        'colors': [const Color(0xFFFF5722), const Color(0xFFFF9800)],
-        'icon': Icons.local_fire_department_rounded,
-      },
-    ];
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -134,7 +189,6 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 15),
             
-            // Infinite Premium Promo Banner Carousel
             SizedBox(
               height: 210,
               child: PageView.builder(
@@ -155,7 +209,6 @@ class _HomePageState extends State<HomePage> {
             ),
 
             const SizedBox(height: 30),
-            // Modern Categories
             const SectionHeader(title: 'Categories', onSeeAll: null),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -203,7 +256,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 20),
             SectionHeader(title: 'Featured Product', onSeeAll: () {}),
             
-            // Featured Products Horizontal List
             SizedBox(
               height: 245,
               child: ListView(
@@ -241,7 +293,6 @@ class _HomePageState extends State<HomePage> {
             ),
 
             const SizedBox(height: 20),
-            // Modern Middle Banner
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
@@ -301,7 +352,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 10),
             SectionHeader(title: 'Best Sellers', onSeeAll: () {}),
             
-            // Best Sellers Grid
             SizedBox(
               height: 245,
               child: ListView(
@@ -344,32 +394,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: primaryGreen,
-          unselectedItemColor: Colors.grey[400],
-          currentIndex: 0,
-          selectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 12),
-          unselectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w500, fontSize: 12),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_filled, size: 26), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite_outline, size: 26), label: 'Wishlist'),
-            BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined, size: 26), label: 'Orders'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded, size: 26), label: 'Profile'),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -384,7 +409,7 @@ class _HomePageState extends State<HomePage> {
     required IconData icon,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8), // Gap between slides
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
