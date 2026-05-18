@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:decommers/services/auth_service.dart';
 import 'package:decommers/unlogin/unLogin.dart';
 
@@ -8,7 +10,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthService();
+    final user = context.watch<User?>();
+    final authService = context.read<AuthService>();
     const primaryGreen = Color(0xFF5BC33C);
 
     return Scaffold(
@@ -38,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             Text(
-              authService.currentUser?.email ?? 'User Email',
+              user?.email ?? 'User Email',
               style: GoogleFonts.outfit(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

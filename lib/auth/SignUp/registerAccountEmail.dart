@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/custom_text_field.dart';
 import 'package:decommers/auth/SignIn/signIn.dart';
-import 'package:decommers/auth/SignUp/registerAccountName-Password.dart';
+import 'package:decommers/auth/SignUp/registerAccountVerification.dart';
+import 'package:decommers/components/toast_popup.dart';
 
 class RegisterAccountEmailScreen extends StatefulWidget {
   const RegisterAccountEmailScreen({super.key});
@@ -73,8 +74,11 @@ class _RegisterAccountEmailScreenState extends State<RegisterAccountEmailScreen>
                   child: ElevatedButton(
                     onPressed: () {
                       if (_emailController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Please enter your email')),
+                        ToastPopup.show(
+                          context,
+                          title: 'Warning',
+                          message: 'Please enter your email',
+                          type: ToastType.warning,
                         );
                         return;
                       }
@@ -82,7 +86,7 @@ class _RegisterAccountEmailScreenState extends State<RegisterAccountEmailScreen>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterAccountNamePasswordScreen(
+                          builder: (context) => RegisterAccountVerificationScreen(
                             email: _emailController.text.trim(),
                           ),
                         ),

@@ -1,9 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/auth/SignUp/registerAccountName-Password.dart';
+import 'package:decommers/components/toast_popup.dart';
 
-class RegisterAccountVerificationScreen extends StatelessWidget {
-  const RegisterAccountVerificationScreen({super.key});
+class RegisterAccountVerificationScreen extends StatefulWidget {
+  final String email;
+  const RegisterAccountVerificationScreen({super.key, required this.email});
+
+  @override
+  State<RegisterAccountVerificationScreen> createState() => _RegisterAccountVerificationScreenState();
+}
+
+class _RegisterAccountVerificationScreenState extends State<RegisterAccountVerificationScreen> {
+  final List<TextEditingController> _otpControllers = List.generate(4, (index) => TextEditingController());
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _handleVerify() async {
+    FocusScope.of(context).unfocus();
+
+    String otp = _otpControllers.map((c) => c.text).join();
+    
+    if (otp.length < 4) {
+      ToastPopup.show(
+        context,
+        title: 'Warning',
+        message: 'Mohon masukkan 4 digit kode OTP',
+        type: ToastType.warning,
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    // Mock API call delay
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (mounted) {
+      setState(() => _isLoading = false);
+      // Mock validation
+      if (otp != '1234') { 
+        ToastPopup.show(
+          context,
+          title: 'Error',
+          message: 'Kode OTP yang Anda masukkan salah',
+          type: ToastType.error,
+        );
+      } else {
+        ToastPopup.show(
+          context,
+          title: 'Verified',
+          message: 'Kode berhasil diverifikasi!',
+          type: ToastType.success,
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterAccountNamePasswordScreen(email: widget.email)),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +108,7 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
                       height: 1.5,
                     ),
                     children: [
-                      const TextSpan(text: 'Kami telah mengirimkan kode verifikasi ke\n+628*******716 '),
+                      TextSpan(text: 'Kami telah mengirimkan kode verifikasi ke\n${widget.email} '),
                       TextSpan(
                         text: 'Ganti?',
                         style: GoogleFonts.outfit(
@@ -68,12 +131,22 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
                         color: const Color(0xFF1A1A1A),
                       ),
                     ),
-                    Text(
-                      'Re-send Code',
-                      style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF005696),
+                    GestureDetector(
+                      onTap: () {
+                        ToastPopup.show(
+                          context,
+                          title: 'Sent',
+                          message: 'A new code has been sent.',
+                          type: ToastType.success,
+                        );
+                      },
+                      child: Text(
+                        'Re-send Code',
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF005696),
+                        ),
                       ),
                     ),
                   ],
@@ -81,7 +154,7 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(4, (index) => _buildOTPBox(context)),
+                  children: List.generate(4, (index) => _buildOTPBox(context, index)),
                 ),
                 const SizedBox(height: 30),
                 Row(
@@ -105,33 +178,28 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 60),
-                // Continue Button
                 Material(
                   color: primaryGreen,
                   borderRadius: BorderRadius.circular(18),
                   elevation: 8,
                   shadowColor: primaryGreen.withOpacity(0.4),
                   child: InkWell(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const RegisterAccountNamePasswordScreen()),
-                      );
-                    },
+                    onTap: _isLoading ? null : _handleVerify,
                     borderRadius: BorderRadius.circular(18),
                     child: Container(
                       width: double.infinity,
                       height: 65,
                       alignment: Alignment.center,
-                      child: Text(
-                        'Continue',
-                        style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isLoading 
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'Continue',
+                            style: GoogleFonts.outfit(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                     ),
                   ),
                 ),
@@ -143,7 +211,7 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOTPBox(BuildContext context) {
+  Widget _buildOTPBox(BuildContext context, int index) {
     return Container(
       width: 75,
       height: 75,
@@ -153,6 +221,7 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
       ),
       child: Center(
         child: TextField(
+          controller: _otpControllers[index],
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           maxLength: 1,
@@ -166,9 +235,9 @@ class RegisterAccountVerificationScreen extends StatelessWidget {
             border: InputBorder.none,
           ),
           onChanged: (value) {
-            if (value.length == 1) {
+            if (value.length == 1 && index < 3) {
               FocusScope.of(context).nextFocus();
-            } else if (value.isEmpty) {
+            } else if (value.isEmpty && index > 0) {
               FocusScope.of(context).previousFocus();
             }
           },

@@ -8,6 +8,9 @@ import 'package:decommers/home/search/searchScreen.dart';
 import 'package:decommers/components/custom_search_bar.dart';
 import 'package:decommers/home/category/categoryScreen.dart';
 import 'package:decommers/home/profile/profileScreen.dart';
+import 'package:decommers/home/whishlist/whislistScreen.dart';
+import 'package:decommers/home/order/orderScreen.dart';
+import 'package:decommers/home/product/cartProduct.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,8 +24,8 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _screens = [
     const HomeContent(),
-    const Scaffold(body: Center(child: Text('Wishlist Screen'))),
-    const Scaffold(body: Center(child: Text('Orders Screen'))),
+    const WishlistScreen(),
+    const OrderScreen(),
     const ProfileScreen(),
   ];
 
@@ -166,7 +169,9 @@ class _HomeContentState extends State<HomeContent> {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const CartProductScreen()));
+              },
               icon: const Icon(Icons.shopping_cart_outlined, color: Color(0xFF1A1A1A), size: 22),
             ),
           ),

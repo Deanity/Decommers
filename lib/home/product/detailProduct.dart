@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/product_card.dart';
+import 'package:decommers/home/product/cartProduct.dart';
 
 class DetailProduct extends StatefulWidget {
   const DetailProduct({super.key});
@@ -42,7 +43,9 @@ class _DetailProductState extends State<DetailProduct> {
             children: [
               IconButton(
                 icon: const Icon(Icons.shopping_cart_outlined, color: Color(0xFF071221)),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CartProductScreen()));
+                },
               ),
               Positioned(
                 right: 8,
@@ -374,7 +377,9 @@ class _DetailProductState extends State<DetailProduct> {
               child: SizedBox(
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _showAddToCartModal(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryGreen,
                     foregroundColor: Colors.white,
@@ -391,6 +396,198 @@ class _DetailProductState extends State<DetailProduct> {
           ],
         ),
       ),
+    );
+  }
+  void _showAddToCartModal(BuildContext context) {
+    int quantity = 1;
+    String selectedVariant = 'Black';
+    final int basePrice = 1500000;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Title and Close Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Add to Cart',
+                        style: GoogleFonts.outfit(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF071221),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close, color: Color(0xFF071221)),
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Color(0xFFEEEEEE), height: 30),
+                  
+                  // Quantity
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Quantity',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF071221),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              if (quantity > 1) {
+                                setModalState(() => quantity--);
+                              }
+                            },
+                            child: Icon(Icons.remove, color: quantity > 1 ? const Color(0xFF071221) : Colors.grey, size: 20),
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            '$quantity',
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF071221),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          GestureDetector(
+                            onTap: () {
+                              setModalState(() => quantity++);
+                            },
+                            child: const Icon(Icons.add, color: primaryGreen, size: 20),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Color(0xFFEEEEEE), height: 40),
+
+                  // Variant
+                  Text(
+                    'Variant',
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF071221),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: ['Black', 'White', 'Blue'].map((variant) {
+                      bool isSelected = selectedVariant == variant;
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setModalState(() => selectedVariant = variant);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: isSelected ? primaryGreen.withOpacity(0.1) : Colors.white,
+                              border: Border.all(
+                                color: isSelected ? primaryGreen : Colors.grey[300]!,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              variant,
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                color: isSelected ? primaryGreen : const Color(0xFF071221),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const Divider(color: Color(0xFFEEEEEE), height: 40),
+
+                  // Total Belanja
+                  Text(
+                    'Total Belanja',
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Rp ${((basePrice * quantity).toString().replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), '.'))}',
+                    style: GoogleFonts.outfit(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF071221),
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+
+                  // Add to Cart Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('$quantity item(s) of $selectedVariant added to cart!'),
+                            backgroundColor: primaryGreen,
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryGreen,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'Add to Cart',
+                        style: GoogleFonts.outfit(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

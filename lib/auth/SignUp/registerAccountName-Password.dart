@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/custom_text_field.dart';
 import 'package:decommers/home/homePage.dart';
 import 'package:decommers/services/auth_service.dart';
+import 'package:decommers/components/toast_popup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterAccountNamePasswordScreen extends StatefulWidget {
   final String email;
@@ -29,15 +31,21 @@ class _RegisterAccountNamePasswordScreenState extends State<RegisterAccountNameP
 
   Future<void> _handleRegister() async {
     if (_nameController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields')),
+      ToastPopup.show(
+        context,
+        title: 'Warning',
+        message: 'Please fill in all required fields',
+        type: ToastType.warning,
       );
       return;
     }
 
     if (_passwordController.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must be at least 6 characters')),
+      ToastPopup.show(
+        context,
+        title: 'Warning',
+        message: 'Password must be at least 6 characters',
+        type: ToastType.warning,
       );
       return;
     }
@@ -54,10 +62,33 @@ class _RegisterAccountNamePasswordScreenState extends State<RegisterAccountNameP
       if (mounted) {
         _showSuccessModal(context);
       }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        String errorMessage;
+        if (e.code == 'weak-password') {
+          errorMessage = 'Kata sandi terlalu lemah.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'Akun dengan email ini sudah ada.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'Format email tidak valid.';
+        } else {
+          errorMessage = 'Terjadi masalah pada server. Silakan coba beberapa saat lagi.';
+        }
+
+        ToastPopup.show(
+          context,
+          title: 'Registrasi Gagal',
+          message: errorMessage,
+          type: ToastType.error,
+        );
+      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+        ToastPopup.show(
+          context,
+          title: 'Error',
+          message: 'Terjadi masalah pada server. Silakan coba beberapa saat lagi.',
+          type: ToastType.error,
         );
       }
     } finally {

@@ -5,6 +5,8 @@ import 'package:decommers/auth/SignIn/resetPassword.dart';
 import 'package:decommers/auth/SignUp/registerAccountEmail.dart';
 import 'package:decommers/home/homePage.dart';
 import 'package:decommers/services/auth_service.dart';
+import 'package:decommers/components/toast_popup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -28,8 +30,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _handleSignIn() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+      ToastPopup.show(
+        context,
+        title: 'Warning',
+        message: 'Please fill in all fields',
+        type: ToastType.warning,
       );
       return;
     }
@@ -42,16 +47,41 @@ class _SignInScreenState extends State<SignInScreen> {
         password: _passwordController.text.trim(),
       );
       if (mounted) {
+        ToastPopup.show(
+          context,
+          title: 'Success',
+          message: 'Signed in successfully!',
+          type: ToastType.success,
+        );
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
           (route) => false,
         );
       }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        String errorMessage;
+        if (e.code == 'user-not-found' || e.code == 'wrong-password' || e.code == 'invalid-credential') {
+          errorMessage = 'Email atau kata sandi yang Anda masukkan salah.';
+        } else {
+          errorMessage = 'Terjadi masalah pada server. Silakan coba beberapa saat lagi.';
+        }
+
+        ToastPopup.show(
+          context,
+          title: 'Login Gagal',
+          message: errorMessage,
+          type: ToastType.error,
+        );
+      }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+        ToastPopup.show(
+          context,
+          title: 'Error',
+          message: 'Terjadi masalah pada server. Silakan coba beberapa saat lagi.',
+          type: ToastType.error,
         );
       }
     } finally {

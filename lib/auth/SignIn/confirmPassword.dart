@@ -1,11 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/custom_text_field.dart';
-
 import 'package:decommers/auth/SignIn/signIn.dart';
+import 'package:decommers/components/toast_popup.dart';
 
-class ConfirmPasswordScreen extends StatelessWidget {
+class ConfirmPasswordScreen extends StatefulWidget {
   const ConfirmPasswordScreen({super.key});
+
+  @override
+  State<ConfirmPasswordScreen> createState() => _ConfirmPasswordScreenState();
+}
+
+class _ConfirmPasswordScreenState extends State<ConfirmPasswordScreen> {
+  final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  void _handleSave() {
+    FocusScope.of(context).unfocus();
+    
+    if (_newPasswordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
+      ToastPopup.show(
+        context,
+        title: 'Warning',
+        message: 'Mohon lengkapi semua kolom',
+        type: ToastType.warning,
+      );
+      return;
+    }
+
+    if (_newPasswordController.text.length < 6) {
+      ToastPopup.show(
+        context,
+        title: 'Error',
+        message: 'Kata sandi harus 6 karakter atau lebih',
+        type: ToastType.error,
+      );
+      return;
+    }
+
+    if (_newPasswordController.text != _confirmPasswordController.text) {
+      ToastPopup.show(
+        context,
+        title: 'Error',
+        message: 'Kata sandi tidak cocok',
+        type: ToastType.error,
+      );
+      return;
+    }
+
+    _showSuccessModal(context);
+  }
 
   void _showSuccessModal(BuildContext context) {
     showDialog(
@@ -21,6 +72,7 @@ class ConfirmPasswordScreen extends StatelessWidget {
               Image.asset(
                 'assets/images/success_illustration_3d.png',
                 height: 150,
+                errorBuilder: (context, error, stackTrace) => const Icon(Icons.check_circle, size: 100, color: Color(0xFF5BC33C)),
               ),
               const SizedBox(height: 30),
               Text(
@@ -47,7 +99,6 @@ class ConfirmPasswordScreen extends StatelessWidget {
       ),
     );
 
-    // Wait 3 seconds then navigate to SignInScreen
     Future.delayed(const Duration(seconds: 3), () {
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(
@@ -100,7 +151,8 @@ class ConfirmPasswordScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 60),
-                const CustomTextField(
+                CustomTextField(
+                  controller: _newPasswordController,
                   label: 'New Password',
                   hintText: 'Enter new password',
                   isPassword: true,
@@ -121,24 +173,21 @@ class ConfirmPasswordScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 30),
-                const CustomTextField(
+                CustomTextField(
+                  controller: _confirmPasswordController,
                   label: 'Confirm New Password',
                   hintText: 'Confirm your password',
                   isPassword: true,
                   textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 60),
-                // Save Update Button
                 Material(
                   color: primaryGreen,
                   borderRadius: BorderRadius.circular(18),
                   elevation: 8,
                   shadowColor: primaryGreen.withOpacity(0.4),
                   child: InkWell(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                      _showSuccessModal(context);
-                    },
+                    onTap: _handleSave,
                     borderRadius: BorderRadius.circular(18),
                     child: Container(
                       width: double.infinity,
@@ -164,3 +213,4 @@ class ConfirmPasswordScreen extends StatelessWidget {
     );
   }
 }
+
