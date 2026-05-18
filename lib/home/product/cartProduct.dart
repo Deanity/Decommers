@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:decommers/components/toast_popup.dart';
 
 class CartProductScreen extends StatefulWidget {
   const CartProductScreen({super.key});
@@ -47,6 +48,12 @@ class _CartProductScreenState extends State<CartProductScreen> {
     setState(() {
       cartItems.removeAt(index);
     });
+    ToastPopup.show(
+      context,
+      title: 'Dihapus',
+      message: 'Produk berhasil dihapus dari keranjang',
+      type: ToastType.success,
+    );
   }
 
   int get _calculateTotal {
@@ -261,7 +268,12 @@ class _CartProductScreenState extends State<CartProductScreen> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Add checkout flow navigation
+                            ToastPopup.show(
+                              context,
+                              title: 'Coming Soon',
+                              message: 'Fitur Checkout sedang dalam pengembangan!',
+                              type: ToastType.info,
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryGreen,

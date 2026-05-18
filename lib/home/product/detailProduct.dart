@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/product_card.dart';
 import 'package:decommers/home/product/cartProduct.dart';
+import 'package:decommers/components/toast_popup.dart';
 
 class DetailProduct extends StatefulWidget {
   const DetailProduct({super.key});
@@ -557,11 +558,11 @@ class _DetailProductState extends State<DetailProduct> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('$quantity item(s) of $selectedVariant added to cart!'),
-                            backgroundColor: primaryGreen,
-                          ),
+                        ToastPopup.show(
+                          context,
+                          title: 'Success',
+                          message: '$quantity item(s) of $selectedVariant added to cart!',
+                          type: ToastType.success,
                         );
                       },
                       style: ElevatedButton.styleFrom(

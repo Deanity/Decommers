@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum ToastType { success, error, warning }
+enum ToastType { success, error, warning, info }
 
 class ToastPopup {
   static void show(
@@ -26,6 +26,10 @@ class ToastPopup {
       case ToastType.warning:
         backgroundColor = Colors.orangeAccent;
         icon = Icons.warning_amber_rounded;
+        break;
+      case ToastType.info:
+        backgroundColor = Colors.blueAccent;
+        icon = Icons.info_outline;
         break;
     }
 

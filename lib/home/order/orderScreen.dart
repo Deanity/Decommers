@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:decommers/components/toast_popup.dart';
 
 class OrderScreen extends StatelessWidget {
   const OrderScreen({super.key});
@@ -148,7 +149,14 @@ class OrderScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ToastPopup.show(
+                        context,
+                        title: 'Coming Soon',
+                        message: 'Fitur pelacakan pesanan akan segera hadir!',
+                        type: ToastType.info,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF5BC33C),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

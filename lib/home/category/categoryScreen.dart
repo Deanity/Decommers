@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/product_card.dart';
 import 'package:decommers/home/product/detailProduct.dart';
+import 'package:decommers/components/toast_popup.dart';
 
 class CategoryScreen extends StatefulWidget {
   final String categoryName;
@@ -268,7 +269,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         child: SizedBox(
                           height: 55,
                           child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ToastPopup.show(
+                                context,
+                                title: 'Info',
+                                message: 'Filter dikembalikan ke pengaturan awal.',
+                                type: ToastType.info,
+                              );
+                            },
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFF071221)),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -285,7 +293,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         child: SizedBox(
                           height: 55,
                           child: ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              ToastPopup.show(
+                                context,
+                                title: 'Success',
+                                message: 'Filter berhasil diterapkan!',
+                                type: ToastType.success,
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryGreen,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
