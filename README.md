@@ -290,4 +290,10 @@ dart run flutter_launcher_icons
 
 ## 📄 Lisensi
 
-Proyek ini bersifat privat dan tidak dipublikasikan ke pub.dev (`publish_to: 'none'`).
+Proyek ini bebas digunakan untuk keperluan belajar maupun referensi, **selama menyebutkan sumber aslinya**.
+
+> **Kredit wajib dicantumkan:**
+> - GitHub: [github.com/Deanity](https://github.com/Deanity/)
+> - Instagram: [@shoyou.nt](https://www.instagram.com/shoyou.nt/)
+
+Proyek ini tidak dipublikasikan ke pub.dev (`publish_to: 'none'`).
