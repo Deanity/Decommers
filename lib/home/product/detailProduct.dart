@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/product_card.dart';
 import 'package:decommers/home/product/cartProduct.dart';
 import 'package:decommers/components/toast_popup.dart';
+import 'package:decommers/home/review/reviewScreen.dart';
 
 class DetailProduct extends StatefulWidget {
   const DetailProduct({super.key});
@@ -249,7 +250,9 @@ class _DetailProductState extends State<DetailProduct> {
                     width: double.infinity,
                     height: 50,
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ReviewScreen()));
+                      },
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Color(0xFF071221)),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

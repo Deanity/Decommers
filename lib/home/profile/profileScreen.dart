@@ -4,6 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:decommers/services/auth_service.dart';
 import 'package:decommers/unlogin/unLogin.dart';
+import 'package:decommers/home/profile/editProfileScreen.dart';
+import 'package:decommers/home/profile/settingScreen.dart';
+import 'package:decommers/home/whishlist/whislistScreen.dart';
+import 'package:decommers/home/order/orderScreen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -51,45 +55,20 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 40),
             
             // Profile Menu Items
-            _buildMenuItem(Icons.person_outline, 'Edit Profile', () {}),
-            _buildMenuItem(Icons.shopping_bag_outlined, 'My Orders', () {}),
-            _buildMenuItem(Icons.favorite_outline, 'Wishlist', () {}),
-            _buildMenuItem(Icons.settings_outlined, 'Settings', () {}),
+            _buildMenuItem(Icons.person_outline, 'Edit Profile', () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfileScreen()));
+            }),
+            _buildMenuItem(Icons.shopping_bag_outlined, 'My Orders', () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderScreen()));
+            }),
+            _buildMenuItem(Icons.favorite_outline, 'Wishlist', () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const WishlistScreen()));
+            }),
+            _buildMenuItem(Icons.settings_outlined, 'Settings', () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingScreen()));
+            }),
             const SizedBox(height: 30),
             
-            // Logout Button
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  await authService.signOut();
-                  if (context.mounted) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const UnLoginScreen()),
-                      (route) => false,
-                    );
-                  }
-                },
-                icon: const Icon(Icons.logout, color: Colors.white),
-                label: Text(
-                  'Sign Out',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 0,
-                ),
-              ),
-            ),
           ],
         ),
       ),

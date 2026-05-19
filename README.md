@@ -13,12 +13,17 @@ A modern, premium **Flutter** mobile e-commerce application branded as **"Freebi
 | **Home (Login)** | Halaman utama penuh dengan carousel banner, kategori, produk unggulan, dan flash sale |
 | **Category Screen** | Daftar produk berdasarkan kategori dengan filter |
 | **Detail Produk** | Halaman detail produk lengkap dengan gambar, deskripsi, varian, dan tombol beli |
-| **Cart** | Keranjang belanja dengan manajemen item dan ringkasan harga |
+| **Review Screen** | Halaman ulasan produk dengan rating overview (bar chart), rating rata-rata, dan daftar review |
+| **Cart** | Keranjang belanja dengan manajemen item, ringkasan harga, dan kupon |
+| **Checkout — User Detail** | Step 1: Isi data diri (nama, email, nomor HP, negara) dengan stepper progress |
+| **Checkout — Delivery** | Step 2: Isi alamat pengiriman dan pilih metode pengiriman (Standard/Express) |
+| **Checkout — Payment** | Step 3: Pilih metode pembayaran (Credit Card/E-Wallet/Bank Transfer) + order summary |
 | **Search Screen** | Pencarian produk dengan riwayat pencarian dan state animasi |
 | **Wishlist** | Daftar produk favorit pengguna |
 | **Orders** | Riwayat dan status pesanan pengguna |
 | **Profile** | Halaman profil dengan info akun, edit profil, dan pengaturan |
 | **Edit Profile** | Form edit data diri pengguna |
+| **Settings** | Halaman pengaturan aplikasi |
 | **Sign In** | Login dengan email/nomor HP dan password |
 | **Sign Up** | Registrasi 3 langkah: Email → Verifikasi OTP → Nama & Password |
 | **Reset Password** | Alur reset sandi via email/HP + verifikasi OTP |
@@ -30,56 +35,62 @@ A modern, premium **Flutter** mobile e-commerce application branded as **"Freebi
 ```
 decommers/
 ├── lib/
-│   ├── main.dart                                    # Entry point aplikasi
+│   ├── main.dart                                         # Entry point aplikasi
 │   ├── splash/
-│   │   └── splashScreen.dart                        # Layar splash (landing page)
+│   │   └── splashScreen.dart                             # Layar splash (landing page)
 │   ├── unlogin/
-│   │   └── unLogin.dart                             # Home tampilan guest (belum login)
+│   │   └── unLogin.dart                                  # Home tampilan guest (belum login)
 │   ├── home/
-│   │   ├── homePage.dart                            # Home tampilan user terautentikasi
+│   │   ├── homePage.dart                                 # Home tampilan user terautentikasi
 │   │   ├── category/
-│   │   │   └── categoryScreen.dart                  # Halaman kategori produk
+│   │   │   └── categoryScreen.dart                       # Halaman kategori produk
 │   │   ├── product/
-│   │   │   ├── detailProduct.dart                   # Halaman detail produk
-│   │   │   └── cartProduct.dart                     # Halaman keranjang belanja
+│   │   │   ├── detailProduct.dart                        # Halaman detail produk
+│   │   │   ├── cartProduct.dart                          # Halaman keranjang belanja
+│   │   │   └── checkout/
+│   │   │       ├── cartDetail.dart                       # Step 1: Data diri (nama, email, HP, negara)
+│   │   │       ├── cartDelivery.dart                     # Step 2: Alamat & metode pengiriman
+│   │   │       └── cartPayment.dart                      # Step 3: Metode pembayaran & order summary
+│   │   ├── review/
+│   │   │   └── reviewScreen.dart                         # Halaman ulasan & rating produk
 │   │   ├── search/
-│   │   │   └── searchScreen.dart                    # Halaman pencarian produk
+│   │   │   └── searchScreen.dart                         # Halaman pencarian produk
 │   │   ├── whishlist/
-│   │   │   └── whislistScreen.dart                  # Halaman wishlist
+│   │   │   └── whislistScreen.dart                       # Halaman wishlist
 │   │   ├── order/
-│   │   │   └── orderScreen.dart                     # Halaman riwayat pesanan
+│   │   │   └── orderScreen.dart                          # Halaman riwayat pesanan
 │   │   └── profile/
-│   │       ├── profileScreen.dart                   # Halaman profil pengguna
-│   │       ├── editProfileScreen.dart               # Form edit profil
-│   │       └── settingScreen.dart                   # Halaman pengaturan
+│   │       ├── profileScreen.dart                        # Halaman profil pengguna
+│   │       ├── editProfileScreen.dart                    # Form edit profil
+│   │       └── settingScreen.dart                        # Halaman pengaturan
 │   ├── auth/
 │   │   ├── SignIn/
-│   │   │   ├── signIn.dart                          # Halaman login
-│   │   │   ├── resetPassword.dart                   # Reset password (input email/HP)
-│   │   │   ├── verificationPassword.dart            # Verifikasi OTP untuk reset sandi
-│   │   │   └── confirmPassword.dart                 # Konfirmasi password baru
+│   │   │   ├── signIn.dart                               # Halaman login
+│   │   │   ├── resetPassword.dart                        # Reset password (input email/HP)
+│   │   │   ├── verificationPassword.dart                 # Verifikasi OTP untuk reset sandi
+│   │   │   └── confirmPassword.dart                      # Konfirmasi password baru
 │   │   └── SignUp/
-│   │       ├── registerAccountEmail.dart            # Step 1: Input email/HP
-│   │       ├── registerAccountVerification.dart     # Step 2: OTP 4 digit
-│   │       └── registerAccountName-Password.dart    # Step 3: Nama, password, referral
+│   │       ├── registerAccountEmail.dart                 # Step 1: Input email/HP
+│   │       ├── registerAccountVerification.dart          # Step 2: OTP 4 digit
+│   │       └── registerAccountName-Password.dart         # Step 3: Nama, password, referral
 │   ├── models/
-│   │   └── user_model.dart                          # Model data pengguna (Firestore)
+│   │   └── user_model.dart                               # Model data pengguna (Firestore)
 │   ├── services/
-│   │   └── auth_service.dart                        # Service Firebase Auth & Firestore
+│   │   └── auth_service.dart                             # Service Firebase Auth & Firestore
 │   └── components/
-│       ├── product_card.dart                        # Kartu produk reusable
-│       ├── category_item.dart                       # Item kategori (ikon + label)
-│       ├── section_header.dart                      # Header seksi dengan "See All"
-│       ├── custom_search_bar.dart                   # Search bar dekoratif di home
-│       ├── custom_text_field.dart                   # Input field dengan toggle password
-│       ├── toast_popup.dart                         # Notifikasi toast custom (success/error/warning/info)
-│       └── news_item.dart                           # Item berita/artikel
+│       ├── product_card.dart                             # Kartu produk reusable
+│       ├── category_item.dart                            # Item kategori (ikon + label)
+│       ├── section_header.dart                           # Header seksi dengan "See All"
+│       ├── custom_search_bar.dart                        # Search bar dekoratif di home
+│       ├── custom_text_field.dart                        # Input field dengan toggle password
+│       ├── toast_popup.dart                              # Notifikasi toast custom (success/error/warning/info)
+│       └── news_item.dart                                # Item berita/artikel
 ├── assets/
 │   ├── icon/
-│   │   └── logo4.png                                # Logo untuk launcher icon
+│   │   └── logo4.png                                     # Logo untuk launcher icon
 │   └── images/
-│       ├── waving_hand_3d.png                       # Ilustrasi di login modal
-│       └── success_illustration_3d.png              # Ilustrasi sukses registrasi
+│       ├── waving_hand_3d.png                            # Ilustrasi di login modal
+│       └── success_illustration_3d.png                   # Ilustrasi sukses registrasi
 ├── pubspec.yaml
 └── README.md
 ```
@@ -96,12 +107,21 @@ SplashScreen
                                 │       └── [Daftar Disini]  ──► SignInScreen
                                 └── SignInScreen
                                         ├── [Sign In] ──────────────────► HomePage (Authenticated)
-                                        │                                       ├── Home
-                                        │                                       ├── Wishlist
-                                        │                                       ├── Orders
-                                        │                                       └── Profile
-                                        │                                               ├── EditProfile
-                                        │                                               └── Settings
+                                        │                                       ├── [Home Tab]
+                                        │                                       │     ├── CategoryScreen
+                                        │                                       │     ├── DetailProductScreen
+                                        │                                       │     │     ├── ReviewScreen
+                                        │                                       │     │     └── CartProductScreen
+                                        │                                       │     │           └── [Checkout]
+                                        │                                       │     │                 ├── CartDetailScreen   (Step 1)
+                                        │                                       │     │                 ├── CartDeliveryScreen (Step 2)
+                                        │                                       │     │                 └── CartPaymentScreen  (Step 3)
+                                        │                                       │     │                       └── [Payment Successful!] ──► HomePage
+                                        │                                       ├── [Wishlist Tab]  ──► WhishlistScreen
+                                        │                                       ├── [Orders Tab]    ──► OrderScreen
+                                        │                                       └── [Profile Tab]
+                                        │                                               ├── EditProfileScreen
+                                        │                                               └── SettingScreen
                                         ├── [Forgot Password] ──► ResetPasswordScreen
                                         │                              └── VerificationPasswordScreen
                                         │                                      └── ConfirmPasswordScreen
@@ -144,10 +164,33 @@ Sistem notifikasi toast custom menggantikan SnackBar bawaan:
 - 4 tipe: `success` 🟢, `error` 🔴, `warning` 🟡, `info` 🔵
 - Muncul dari atas layar dengan animasi slide-in
 - Judul dan pesan terkustomisasi
-- Digunakan di seluruh alur autentikasi (Sign In, Sign Up, Reset Password)
+- Digunakan di seluruh alur autentikasi & checkout
 
 ### `NewsItem`
 Widget artikel/berita dengan thumbnail, judul, subtitle, dan tanggal.
+
+---
+
+## 🛍️ Alur Checkout (3-Step)
+
+Checkout menggunakan **stepper visual** (User Detail → Delivery → Payment) yang konsisten di ketiga halaman.
+
+| Step | Halaman | Isi |
+|---|---|---|
+| **1 — User Detail** | `CartDetailScreen` | Ringkasan item, harga, kupon + form nama, email, HP, negara |
+| **2 — Delivery** | `CartDeliveryScreen` | Alamat lengkap (jalan, kota, provinsi, kode pos) + pilih metode kirim (Standard/Express) |
+| **3 — Payment** | `CartPaymentScreen` | Pilih metode bayar (Credit Card / E-Wallet / Bank Transfer) + order summary + konfirmasi |
+
+Setelah pembayaran berhasil, muncul **success dialog** dan pengguna diarahkan kembali ke `HomePage`.
+
+---
+
+## ⭐ Review Screen
+
+`ReviewScreen` menampilkan:
+- **Rating overview** — skor rata-rata (misal 4.6/5) + jumlah review
+- **Bar chart** per bintang (1–5) menggunakan `LinearProgressIndicator`
+- **Daftar review** — nama reviewer, waktu, rating bintang, dan teks ulasan
 
 ---
 
@@ -181,7 +224,7 @@ Model data pengguna yang disimpan di Firestore collection `users`:
 |---|---|
 | **Primary Color** | `#5BC33C` (Vibrant Green) |
 | **Dark Text** | `#071221` / `#1A1A1A` |
-| **Background** | `#F8F9FA` (home), `#FFFFFF` (auth) |
+| **Background** | `#F8F9FA` (home), `#FFFFFF` (auth & checkout) |
 | **Card Background** | `#FFFFFF` dengan shadow halus |
 | **Input Background** | `#F9F9F9` |
 | **Font** | `Google Fonts — Outfit` |
@@ -254,7 +297,13 @@ dart run flutter_launcher_icons
 - [x] Bottom navigation bar (Home, Wishlist, Orders, Profile)
 - [x] Category screen dengan daftar produk per kategori
 - [x] Detail produk (gambar, deskripsi, varian, harga)
+- [x] Review screen — rating overview, bar chart per bintang, daftar ulasan
 - [x] Keranjang belanja (Cart) — UI & manajemen item
+- [x] **Alur Checkout 3 langkah:**
+  - [x] Step 1 — User Detail (nama, email, HP, negara)
+  - [x] Step 2 — Delivery (alamat + pilih metode kirim Standard/Express)
+  - [x] Step 3 — Payment (Credit Card / E-Wallet / Bank Transfer + order summary)
+  - [x] Success dialog setelah pembayaran → kembali ke HomePage
 - [x] Search screen dengan riwayat pencarian & state kosong
 - [x] Wishlist screen (UI)
 - [x] Order screen — riwayat pesanan (UI)
@@ -279,12 +328,13 @@ dart run flutter_launcher_icons
 
 - [ ] Integrasi Firestore untuk data produk nyata
 - [ ] Wishlist fungsional (tambah/hapus dari Firestore)
-- [ ] Keranjang belanja terintegrasi backend
-- [ ] Checkout & payment flow
+- [ ] Keranjang & checkout terintegrasi backend (data real)
+- [ ] Pembayaran nyata (Midtrans / Xendit)
 - [ ] Notifikasi push (Firebase Cloud Messaging)
 - [ ] Pencarian produk nyata dari API/Firestore
 - [ ] Upload foto profil (Firebase Storage)
-- [ ] Order tracking nyata
+- [ ] Order tracking nyata dari backend
+- [ ] Review & rating dari pengguna nyata (Firestore)
 
 ---
 
@@ -293,7 +343,7 @@ dart run flutter_launcher_icons
 Proyek ini bebas digunakan untuk keperluan belajar maupun referensi, **selama menyebutkan sumber aslinya**.
 
 > **Kredit wajib dicantumkan:**
-> - GitHub: [github.com/Deanity](https://github.com/Deanity/)
-> - Instagram: [@shoyou.nt](https://www.instagram.com/shoyou.nt/)
+> - 🐙 GitHub: [github.com/Deanity](https://github.com/Deanity/)
+> - 📸 Instagram: [@shoyou.nt](https://www.instagram.com/shoyou.nt/)
 
 Proyek ini tidak dipublikasikan ke pub.dev (`publish_to: 'none'`).

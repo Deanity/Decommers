@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:decommers/components/toast_popup.dart';
+import 'package:decommers/home/product/checkout/cartDetail.dart';
 
 class CartProductScreen extends StatefulWidget {
   const CartProductScreen({super.key});
@@ -268,12 +269,7 @@ class _CartProductScreenState extends State<CartProductScreen> {
                         height: 55,
                         child: ElevatedButton(
                           onPressed: () {
-                            ToastPopup.show(
-                              context,
-                              title: 'Coming Soon',
-                              message: 'Fitur Checkout sedang dalam pengembangan!',
-                              type: ToastType.info,
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const CartDetailScreen()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryGreen,
